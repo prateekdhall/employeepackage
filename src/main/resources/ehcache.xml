@@ -1,0 +1,25 @@
+<config
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://www.ehcache.org/v3'  
+    xmlns:jsr107='http://www.ehcache.org/v3/jsr107'>  
+
+  <service>
+    <jsr107:defaults>
+      <jsr107:cache name="employeeCache" template="cache1"/> 
+    </jsr107:defaults>
+  </service>
+<diskStore path="C:/mycache"/>
+  <cache-template name="cache1">
+  <persistence strategy="localRestartable" synchronousWrites="true"/>
+    <listeners>    
+      <listener>
+        <class>org.terracotta.ehcache.EventLogger</class>
+      </listener>
+    </listeners>
+    <resources>
+      <heap unit="entries">0</heap> 
+      <offheap unit="MB">0</offheap> 
+       <disk persistent="true" unit="MB">100</disk>
+    </resources>
+  </cache-template>
+</config>
