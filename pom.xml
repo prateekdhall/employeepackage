@@ -10,7 +10,6 @@
 	</parent>
 	<groupId>com.sapient.lloyd</groupId>
 	<artifactId>employeepackage</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>employeepackage</name>
 	<description>Excercise for lloyds</description>
 
@@ -92,4 +91,5 @@
 		</plugins>
 	</build>
 
+	<version>0.0.1-SNAPSHOT</version>
 </project>

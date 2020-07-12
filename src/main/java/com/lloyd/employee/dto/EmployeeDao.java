@@ -21,6 +21,12 @@ import com.lloyd.employee.model.Employee;
 import com.lloyd.employee.model.EmployeeSalaryRange;
 import com.lloyd.employee.util.QueryUtils;
 
+/**
+ * This class list all database operations for Employee table
+ * 
+ * @author pradhal
+ *
+ */
 @Repository
 @Transactional
 public class EmployeeDao {
@@ -30,16 +36,32 @@ public class EmployeeDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	/**
+	 * This method persist employee object in database
+	 * 
+	 * @param employee
+	 */
 	public void save(Employee employee) {
 		entityManager.persist(employee);
 	}
 
+	/**
+	 * Get all employee list
+	 * 
+	 * @return List<Employee>
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Employee> getAllEmployeeList() {
 		logger.info("EmployeeDao: getAllEmployeeList:: Get all employee list");
 		return entityManager.createQuery("from Employee").getResultList();
 	}
 
+	/**
+	 * Get all employee list by place
+	 * 
+	 * @param place
+	 * @return List<Employee>
+	 */
 	@Cacheable(value = "employeeCache", key = "#place")
 	@SuppressWarnings("unchecked")
 	public List<Employee> findByPlace(String place) {
@@ -48,6 +70,12 @@ public class EmployeeDao {
 				.setParameter("place", place).getResultList();
 	}
 
+	/**
+	 * Get max and min salary range by employee title
+	 * 
+	 * @param title
+	 * @return EmployeeSalaryRange
+	 */
 	public EmployeeSalaryRange getSalarayRange(String title) {
 		logger.info("EmployeeDao: getSalarayRange:: Get max and min salaray range by employee title");
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -60,6 +88,13 @@ public class EmployeeDao {
 		return entityManager.createQuery(cq).getSingleResult();
 	}
 
+	/**
+	 * Get supervisees list by supervisor id
+	 * 
+	 * @param supervisor
+	 * @return List<BigInteger>
+	 */
+	@SuppressWarnings("unchecked")
 	public List<BigInteger> getSupervisees(int supervisor) {
 		logger.info("EmployeeDao: getSupervisees:: Get supervisees list by supervisor id");
 		Query query = entityManager.createNativeQuery(QueryUtils.queryForSupervisee(supervisor));
@@ -67,6 +102,13 @@ public class EmployeeDao {
 		return superviseeList;
 	}
 
+	/**
+	 * Get total salary by a specific domain
+	 * 
+	 * @param domain
+	 * @param value
+	 * @return Double
+	 */
 	public Double getTotalSalaryByDomain(String domain, String value) {
 		logger.info("EmployeeDao: getTotalSalaryByDomain:: Get total salary by a specific domain");
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -77,6 +119,13 @@ public class EmployeeDao {
 		return entityManager.createQuery(query).getSingleResult();
 	}
 
+	/**
+	 * update employee details for a place with a given percentage
+	 * 
+	 * @param place
+	 * @param percent
+	 * @return List<Employee>
+	 */
 	@Cacheable(value = "employeeCache")
 	public List<Employee> updateEmployeePercentage(String place, int percent) {
 		logger.info(
