@@ -10,8 +10,6 @@ public interface EmployeeService {
 
 	public List<Employee> getAllEmployeeList();
 
-	public void insertCSVEmployeeData(String filepath);
-
 	public List<Employee> updateEmployee(String place, int percent);
 
 	public List<BigInteger> findSuperviseeByEmpId(int supervisor);
