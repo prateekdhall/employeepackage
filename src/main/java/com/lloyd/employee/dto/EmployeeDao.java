@@ -31,7 +31,7 @@ import com.lloyd.employee.util.QueryUtils;
 @Transactional
 public class EmployeeDao {
 
-	Logger logger = LogManager.getLogger(EmployeeDao.class);
+	private static final Logger logger = LogManager.getLogger(EmployeeDao.class);
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -131,7 +131,6 @@ public class EmployeeDao {
 		logger.info(
 				"EmployeeDao: updateEmployeePercentage:: update employee details for a place with a given percentage");
 		List<Employee> employeeList = findByPlace(place);
-
 		List<Employee> updatedEmployeeList = employeeList.stream().map(emp -> {
 			emp.setSalary(emp.getSalary() * percent);
 			return emp;

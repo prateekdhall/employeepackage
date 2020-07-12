@@ -33,8 +33,7 @@ import io.swagger.annotations.ApiResponses;
 public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
-	Logger logger = LogManager.getLogger(EmployeeController.class);
-	
+	private static final Logger logger = LogManager.getLogger(EmployeeController.class);
 
 	/**
 	 * This API fetch all employee list from database
@@ -42,7 +41,10 @@ public class EmployeeController {
 	 * @return List<Employee>
 	 */
 	@ApiOperation(value = "This API fetch all employee list from database")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch data successfully"),
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Fetch data successfully"),
+			@ApiResponse(code = 400, message = "Bad request"), 
+			@ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
@@ -60,8 +62,10 @@ public class EmployeeController {
 	@ApiOperation(value = "This API return the list of employees for a given place ")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Fetch list of employees for a given place successfully"),
+			@ApiResponse(code = 400, message = "Bad request"), 
+			@ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
-	@RequestMapping(value = "/place/{place}", method = RequestMethod.GET)
+	@RequestMapping(value = "/place/{place}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public List<Employee> getEmployeeByPlace(@PathVariable(name = "place") String place) {
 		logger.info("EmployeeController: getEmployeeByPlace");
@@ -78,6 +82,8 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API return list of all supervisees of a given supervisor ")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch list of all supervisees successfully"),
+			@ApiResponse(code = 400, message = "Bad request"), 
+			@ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/supervisees/{supervisor}", method = RequestMethod.GET)
 	@ResponseBody
@@ -102,6 +108,8 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API return Total salary details by business-unit, supervisor, place")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch Total salary successfully"),
+			@ApiResponse(code = 400, message = "Bad request"), 
+			@ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/totalSalary/{domain}/{value}", method = RequestMethod.GET)
 	@ResponseBody
@@ -126,6 +134,8 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API return salary range for a title")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch salary range for a title successfully"),
+			@ApiResponse(code = 400, message = "Bad request"), 
+			@ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/salaryrange/{title}", method = RequestMethod.GET)
 	@ResponseBody
@@ -140,7 +150,7 @@ public class EmployeeController {
 		}
 		return salary.toString();
 	}
-	
+
 	/**
 	 * This API fetch employee list by place and update salary for a given
 	 * percentage
@@ -151,6 +161,8 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API fetch employee list by place and update salary for a given percentage")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Update Data successfully"),
+			@ApiResponse(code = 400, message = "Bad request"), 
+			@ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/place/{place}/salary/{percent}", method = RequestMethod.PUT)
 	@ResponseBody
