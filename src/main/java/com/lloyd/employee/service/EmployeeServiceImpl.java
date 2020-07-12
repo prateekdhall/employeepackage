@@ -21,7 +21,7 @@ import com.lloyd.employee.model.EmployeeSalaryRange;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-	Logger logger = LogManager.getLogger(EmployeeServiceImpl.class);
+	private static final Logger logger = LogManager.getLogger(EmployeeServiceImpl.class);
 
 	@Autowired
 	private EmployeeDao employeeDao;

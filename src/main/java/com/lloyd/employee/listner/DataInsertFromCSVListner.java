@@ -22,7 +22,7 @@ import com.lloyd.employee.model.Employee;
  *
  */
 public class DataInsertFromCSVListner implements ApplicationListener<ApplicationStartedEvent> {
-	Logger logger = LogManager.getLogger(DataInsertFromCSVListner.class);
+	private static final Logger logger = LogManager.getLogger(DataInsertFromCSVListner.class);
 
 	@Override
 	public void onApplicationEvent(ApplicationStartedEvent event) {
