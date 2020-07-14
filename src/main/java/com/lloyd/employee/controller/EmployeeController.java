@@ -7,7 +7,9 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,16 +43,19 @@ public class EmployeeController {
 	 * @return List<Employee>
 	 */
 	@ApiOperation(value = "This API fetch all employee list from database")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Fetch data successfully"),
-			@ApiResponse(code = 400, message = "Bad request"), 
-			@ApiResponse(code = 404, message = "Resource not found"),
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch data successfully", response = Employee.class),
+			@ApiResponse(code = 400, message = "Bad request"), @ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public List<Employee> getAllEmployeeList() {
+	public ResponseEntity<List<Employee>> getAllEmployeeList() {
 		logger.info("EmployeeController: getAllEmployeeList");
-		return employeeService.getAllEmployeeList();
+		List<Employee> response = employeeService.getAllEmployeeList();
+		if (response != null) {
+			return new ResponseEntity<List<Employee>>(response, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<Employee>>(HttpStatus.NOT_FOUND);
+
 	}
 
 	/**
@@ -62,16 +67,19 @@ public class EmployeeController {
 	@ApiOperation(value = "This API return the list of employees for a given place ")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Fetch list of employees for a given place successfully"),
-			@ApiResponse(code = 400, message = "Bad request"), 
-			@ApiResponse(code = 404, message = "Resource not found"),
+			@ApiResponse(code = 400, message = "Bad request"), @ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
-	@RequestMapping(value = "/place/{place}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/place/{place}", method = RequestMethod.GET, produces = {
+			MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public List<Employee> getEmployeeByPlace(@PathVariable(name = "place") String place) {
+	public ResponseEntity<List<Employee>> getEmployeeByPlace(@PathVariable(name = "place") String place) {
 		logger.info("EmployeeController: getEmployeeByPlace");
-		List<Employee> employee = new ArrayList<Employee>();
-		employee = employeeService.getByPlace(place);
-		return employee;
+		List<Employee> response = new ArrayList<Employee>();
+		response = employeeService.getByPlace(place);
+		if (response != null) {
+			return new ResponseEntity<List<Employee>>(response, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<Employee>>(HttpStatus.NOT_FOUND);
 	}
 
 	/**
@@ -82,8 +90,7 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API return list of all supervisees of a given supervisor ")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch list of all supervisees successfully"),
-			@ApiResponse(code = 400, message = "Bad request"), 
-			@ApiResponse(code = 404, message = "Resource not found"),
+			@ApiResponse(code = 400, message = "Bad request"), @ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/supervisees/{supervisor}", method = RequestMethod.GET)
 	@ResponseBody
@@ -108,8 +115,7 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API return Total salary details by business-unit, supervisor, place")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch Total salary successfully"),
-			@ApiResponse(code = 400, message = "Bad request"), 
-			@ApiResponse(code = 404, message = "Resource not found"),
+			@ApiResponse(code = 400, message = "Bad request"), @ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/totalSalary/{domain}/{value}", method = RequestMethod.GET)
 	@ResponseBody
@@ -134,8 +140,7 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API return salary range for a title")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetch salary range for a title successfully"),
-			@ApiResponse(code = 400, message = "Bad request"), 
-			@ApiResponse(code = 404, message = "Resource not found"),
+			@ApiResponse(code = 400, message = "Bad request"), @ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/salaryrange/{title}", method = RequestMethod.GET)
 	@ResponseBody
@@ -161,8 +166,7 @@ public class EmployeeController {
 	 */
 	@ApiOperation(value = "This API fetch employee list by place and update salary for a given percentage")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Update Data successfully"),
-			@ApiResponse(code = 400, message = "Bad request"), 
-			@ApiResponse(code = 404, message = "Resource not found"),
+			@ApiResponse(code = 400, message = "Bad request"), @ApiResponse(code = 404, message = "Resource not found"),
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/place/{place}/salary/{percent}", method = RequestMethod.PUT)
 	@ResponseBody

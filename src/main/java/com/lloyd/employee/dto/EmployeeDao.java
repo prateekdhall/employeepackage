@@ -97,6 +97,7 @@ public class EmployeeDao {
 	@SuppressWarnings("unchecked")
 	public List<BigInteger> getSupervisees(int supervisor) {
 		logger.info("EmployeeDao: getSupervisees:: Get supervisees list by supervisor id");
+		System.out.println(QueryUtils.queryForSupervisee(supervisor));
 		Query query = entityManager.createNativeQuery(QueryUtils.queryForSupervisee(supervisor));
 		List<BigInteger> superviseeList = query.getResultList();
 		return superviseeList;
