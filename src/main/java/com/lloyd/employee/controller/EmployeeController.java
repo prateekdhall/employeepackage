@@ -94,16 +94,17 @@ public class EmployeeController {
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/supervisees/{supervisor}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<BigInteger> getEmployeeSupervisees(@PathVariable(name = "supervisor") int supervisor) {
+	public ResponseEntity<List<BigInteger>> getEmployeeSupervisees(@PathVariable(name = "supervisor") int supervisor) {
 		logger.info("EmployeeController: getEmployeeSupervisees");
-		List<BigInteger> supervisees = null;
+		List<BigInteger> response = null;
 		try {
-			supervisees = employeeService.findSuperviseeByEmpId(supervisor);
+			response = employeeService.findSuperviseeByEmpId(supervisor);
 		} catch (Exception ex) {
 			logger.error("EmployeeController: getEmployeeSupervisees", ex);
-			return supervisees;
+			return new ResponseEntity<List<BigInteger>>(HttpStatus.NOT_FOUND);
 		}
-		return supervisees;
+		return new ResponseEntity<List<BigInteger>>(response, HttpStatus.OK);
+
 	}
 
 	/**
@@ -119,7 +120,7 @@ public class EmployeeController {
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/totalSalary/{domain}/{value}", method = RequestMethod.GET)
 	@ResponseBody
-	public Double getTotalSalaryByParams(@PathVariable(name = "domain") String domain,
+	public ResponseEntity<Double> getTotalSalaryByParams(@PathVariable(name = "domain") String domain,
 			@PathVariable(name = "value") String value) {
 		logger.info("EmployeeController: getTotalSalaryByParams");
 		double totalSalary = 0;
@@ -127,9 +128,9 @@ public class EmployeeController {
 			totalSalary = employeeService.fetchTotalSalaryByParams(domain, value);
 		} catch (Exception ex) {
 			logger.error("EmployeeController: getTotalSalaryByParams", ex);
-			return totalSalary;
+			return new ResponseEntity<Double>(totalSalary, HttpStatus.NOT_FOUND);
 		}
-		return totalSalary;
+		return new ResponseEntity<Double>(totalSalary, HttpStatus.OK);
 	}
 
 	/**
@@ -144,16 +145,16 @@ public class EmployeeController {
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/salaryrange/{title}", method = RequestMethod.GET)
 	@ResponseBody
-	public String getEmployeeSalaryRange(@PathVariable(name = "title") String title) {
+	public ResponseEntity<String> getEmployeeSalaryRange(@PathVariable(name = "title") String title) {
 		EmployeeSalaryRange salary = new EmployeeSalaryRange();
 		logger.info("EmployeeController: getEmployeeSalaryRange");
 		try {
 			salary = employeeService.getSalRange(title);
 		} catch (Exception ex) {
 			logger.error("EmployeeController: getEmployeeSalaryRange", ex);
-			return salary.toString();
+			return new ResponseEntity<String>(salary.toString(), HttpStatus.NOT_FOUND);
 		}
-		return salary.toString();
+		return new ResponseEntity<String>(salary.toString(), HttpStatus.OK);
 	}
 
 	/**
@@ -170,7 +171,7 @@ public class EmployeeController {
 			@ApiResponse(code = 500, message = "Internal server error") })
 	@RequestMapping(value = "/place/{place}/salary/{percent}", method = RequestMethod.PUT)
 	@ResponseBody
-	public List<Employee> updateEmployeeSalary(@PathVariable(value = "place") String place,
+	public ResponseEntity<List<Employee>> updateEmployeeSalary(@PathVariable(value = "place") String place,
 			@PathVariable(value = "percent") int percent) {
 		List<Employee> employeeList = new ArrayList<Employee>();
 		try {
@@ -178,9 +179,9 @@ public class EmployeeController {
 			employeeList = employeeService.updateEmployee(place, percent);
 		} catch (Exception exception) {
 			logger.error("EmployeeController: updateEmployeeSalary", exception);
-			return employeeList;
+			return new ResponseEntity<List<Employee>>(HttpStatus.NOT_FOUND);
 		}
-		return employeeList;
+		return new ResponseEntity<List<Employee>>(employeeList, HttpStatus.OK);
 	}
 
 }
